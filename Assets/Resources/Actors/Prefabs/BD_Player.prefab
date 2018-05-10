@@ -101,10 +101,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bar: {fileID: 1681883622561256, guid: ee7ad1005d2d5f4488638e889c6b5080, type: 2}
   m_currentDirection: -1
+  m_runSpeed: 0.05
   m_rigidbody2D: {fileID: 50439468599455170, guid: ee7ad1005d2d5f4488638e889c6b5080,
     type: 2}
   m_spriteRenderer: {fileID: 212136719051613184}
-  m_runSpeed: 0.05
 --- !u!212 &212136719051613184
 SpriteRenderer:
   m_ObjectHideFlags: 1

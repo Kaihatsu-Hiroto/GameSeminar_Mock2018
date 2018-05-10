@@ -25,30 +25,20 @@ public class LerpTest : MonoBehaviour {
         set
         {
             var render = GetComponent<Renderer>();
-            if (render == null)
-            {
-                return;
-            }
+            if (render == null){return;}
 
-            if (render.material == null)
-            {
-                return;
-            }
-
+            if (render.material == null){return;}
             render.material.color = value;
         }
-
     }
 
 
-    void Start()
-    {
+    void Start(){
         m_startTime = Time.time;
         m_startPosition = transform.position;
     }
 
-    void Update()
-    {
+    void Update(){
         float timeStep = m_time > 0.0f ? (Time.time - m_startTime) / m_time : 1.0f;
         timeStep = Mathf.Clamp01(timeStep);
 

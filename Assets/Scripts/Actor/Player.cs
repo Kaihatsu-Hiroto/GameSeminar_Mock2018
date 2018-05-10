@@ -12,7 +12,7 @@ public class Player : MonoBehaviour {
     private Vector3 m_move;
 
     /// <summary> クリックした座標 </summary>
-    private Vector3 hitPos = Vector3.zero;
+    private Vector3 m_hitPos = Vector3.zero;
 
     /// <summary> 生成するバー </summary>
     [SerializeField]
@@ -35,10 +35,20 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private SpriteRenderer m_spriteRenderer;
 
+
+
     private void Start(){
         m_spriteRenderer.flipX = m_currentDirection == Direction.RIGHT;
         m_move = new Vector3(m_runSpeed, 0, 0);
     }
+
+
+    public Vector3 HitPosition {
+        get{
+            return m_hitPos; 
+           }
+    }
+
 
     /// <summary>
     /// プレイヤーの移動
@@ -64,13 +74,12 @@ public class Player : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)){
             if (hit.collider){
                 bar = Instantiate(bar, transform.position,Quaternion.identity);
-                hitPos = ray.origin;
+                m_hitPos = ray.origin;
                 m_barflg = true;
             }
         }
     }
     
-    // Update is called once per frame
    private void Update () {
         Run();
         Birth();
