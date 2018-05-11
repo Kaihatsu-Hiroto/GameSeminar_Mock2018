@@ -567,7 +567,7 @@ Prefab:
         type: 2}
       propertyPath: m_bar
       value: 
-      objectReference: {fileID: 1452862908329832, guid: 3901b168410f03f42b98668444a989a5,
+      objectReference: {fileID: 1918829161566532, guid: e4485161a55dfff41991189fa3bc3eb9,
         type: 2}
     - target: {fileID: 114020133547805112, guid: 8d456ef2061faf8499e09440c894817b,
         type: 2}

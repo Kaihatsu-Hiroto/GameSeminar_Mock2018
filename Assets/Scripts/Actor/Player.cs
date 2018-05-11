@@ -53,6 +53,8 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private SpriteRenderer m_spriteRenderer;
 
+    Vector3 hoge;
+
     private void Start() {
         m_spriteRenderer.flipX = m_currentDirection == Direction.RIGHT;
         m_move = new Vector3(m_runSpeed, 0, 0);
@@ -134,21 +136,20 @@ public class Player : MonoBehaviour {
             m_mousePosition.z = -Camera.main.transform.position.z;
             mouseVector = Camera.main.ScreenToWorldPoint(m_mousePosition);
 
-
             LineRenderer m_lineRenderer;
             m_lineRenderer = m_bar.GetComponent<LineRenderer>();
 
-            float zRotation = Mathf.Atan2(mouseVector.y -transform.position.y, mouseVector.x - transform.position.x) * Mathf.Rad2Deg;
-            m_bar.transform.rotation = Quaternion.Euler(0f, 0f, zRotation);
-
             m_lineRenderer.SetPosition(0, transform.position);
-            m_lineRenderer.SetPosition(1, m_mousePosition);
+            m_lineRenderer.SetPosition(1, mouseVector);
+           // hoge = Vector3.Lerp(transform.position, mouseVector, Time.deltaTime * 2);
+
         }
+        
     }
 
     void Update() {
         PlayerAction();
-        Birth();
-        
+        Extend();
+
     }
 }
