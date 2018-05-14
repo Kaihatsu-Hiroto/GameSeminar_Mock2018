@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class hoge : MonoBehaviour {
 
-
+    public Vector3 vec = new Vector3(3, 3, 4);
     Vector3 hogemove = new Vector3(0, 0.05f, 0);
     public Vector3 hogePos;
     public void move()
@@ -13,6 +13,7 @@ public class hoge : MonoBehaviour {
         else if (transform.position.y < -4){transform.position += hogemove;}
         hogePos = transform.position;
     }
+
 	// Update is called once per frame
 	void Update () {
         move();

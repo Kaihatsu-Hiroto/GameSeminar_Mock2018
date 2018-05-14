@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4554402079658382}
   - component: {fileID: 50982812819038318}
   - component: {fileID: 120139528893192794}
+  - component: {fileID: 114920658542441350}
   m_Layer: 0
   m_Name: bar
   m_TagString: Untagged
@@ -35,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1918829161566532}
   m_LocalRotation: {x: 0, y: 0, z: 0.2164396, w: 0.97629607}
-  m_LocalPosition: {x: 0.54378474, y: 0.25357097, z: 0}
+  m_LocalPosition: {x: 1165.2114, y: 543.3456, z: 0}
   m_LocalScale: {x: 0.2, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -61,6 +62,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &114920658542441350
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1918829161566532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08750f8ee7ac2964996578ca992ab058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_extendSpeed: 0.01
+  pl: {fileID: 0}
 --- !u!120 &120139528893192794
 LineRenderer:
   m_ObjectHideFlags: 1
@@ -70,6 +84,7 @@ LineRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -85,6 +100,7 @@ LineRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -94,8 +110,8 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: -1.31, z: 0}
   - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 2.7499979, z: 0}
   m_Parameters:
     serializedVersion: 2
     widthMultiplier: 0.2

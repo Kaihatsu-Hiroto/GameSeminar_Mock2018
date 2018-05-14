@@ -22,7 +22,7 @@ public class Player : MonoBehaviour {
     Vector3 m_mousePosition;
 
     /// <summary> 二次元ベクトル </summvary>
-    Vector2 mouseVector;
+    public Vector2 mouseVector;
     
     /// <summary>伸ばす速さ </summary>
     [SerializeField]
@@ -53,10 +53,13 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private SpriteRenderer m_spriteRenderer;
 
-    Vector3 hoge;
+    private LineRenderer m_lineRenderer;
+
+    float hogey = 0;
 
     private void Start() {
         m_spriteRenderer.flipX = m_currentDirection == Direction.RIGHT;
+        m_lineRenderer = m_bar.GetComponent<LineRenderer>();
         m_move = new Vector3(m_runSpeed, 0, 0);
         m_jump = new Vector3(0, m_jumpPower, 0);
     }
@@ -127,29 +130,25 @@ public class Player : MonoBehaviour {
     /// 何かを伸ばす
     /// </summary>
     public void Extend(){
+        m_lineRenderer.useWorldSpace = true;
         if (Input.GetMouseButtonDown(0))
-        {
-
+        {        
             m_bar = Instantiate(m_bar, transform.position, Quaternion.identity);
 
-            m_mousePosition = Input.mousePosition;
-            m_mousePosition.z = -Camera.main.transform.position.z;
-            mouseVector = Camera.main.ScreenToWorldPoint(m_mousePosition);
-
-            LineRenderer m_lineRenderer;
-            m_lineRenderer = m_bar.GetComponent<LineRenderer>();
-
-            m_lineRenderer.SetPosition(0, transform.position);
-            m_lineRenderer.SetPosition(1, mouseVector);
-           // hoge = Vector3.Lerp(transform.position, mouseVector, Time.deltaTime * 2);
-
+            
+            m_lineRenderer.SetPosition(0, new Vector3(0, 0, 0));         
         }
-        
+        //hoge = Vector3.Lerp(transform.position, mouseVector, Time.deltaTime * 2);
+        m_lineRenderer.SetPosition(1, new Vector3(0, hogey,0));
+        hogey += 0.01f;
     }
 
     void Update() {
         PlayerAction();
-        Extend();
 
+        m_mousePosition = Input.mousePosition;
+        m_mousePosition.z = -Camera.main.transform.position.z;
+        mouseVector = Camera.main.ScreenToWorldPoint(m_mousePosition);
+   
     }
 }
