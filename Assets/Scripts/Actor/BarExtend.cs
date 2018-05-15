@@ -16,7 +16,8 @@ public class BarExtend : MonoBehaviour {
 
     public Player pl;
 
-    Vector3 hoge;
+    [HideInInspector]
+    public Vector3 hoge;
 
     Vector3 m_mousePosition;
 
@@ -27,7 +28,7 @@ public class BarExtend : MonoBehaviour {
         
         state = 0;
 
-        
+       
     }
 
     public void Extend(){
@@ -35,7 +36,6 @@ public class BarExtend : MonoBehaviour {
         m_mousePosition = Input.mousePosition;
         m_mousePosition.z = -Camera.main.transform.position.z;
         mouseVector = Camera.main.ScreenToWorldPoint(m_mousePosition);
-
 
         m_lineRenderer.useWorldSpace = true;
 
@@ -58,8 +58,8 @@ public class BarExtend : MonoBehaviour {
                     hoge = Vector3.Lerp(hoge, mouseVector, 0.3f);
                 break;
             case BarState.Shrink:
-                hoge -= Vector3.Lerp(hoge, mouseVector, 0.3f);
-                { state = BarState.Default; }
+                //hoge -= Vector3.Lerp(hoge, mouseVector, 0.3f);
+                state = BarState.Default;
                 break;
             default:
                 break;

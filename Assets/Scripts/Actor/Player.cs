@@ -13,16 +13,6 @@ public class Player : MonoBehaviour {
 
     /// <summary> 移動 </summary>
     private Vector3 m_jump;
-
-    /// <summary> クリックした座標 </summary>
-    [HideInInspector]
-    public Vector3 m_hitPos;
-
-    /// <summary> クリックした座標 </summary>
-    Vector3 m_mousePosition;
-
-    /// <summary> 二次元ベクトル </summvary>
-    public Vector2 mouseVector;
     
     /// <summary>伸ばす速さ </summary>
     [SerializeField]
@@ -44,24 +34,22 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private float m_runSpeed;
 
-    /// <summary> バー生成フラグ </summary>
-    private bool m_barflg;
-
     [SerializeField]
     private Rigidbody2D m_rigidbody2D;
 
     [SerializeField]
     private SpriteRenderer m_spriteRenderer;
 
-    private LineRenderer m_lineRenderer;
+    [SerializeField]
+    private Tip m_tip;
 
     float hogey = 0;
 
     private void Start() {
         m_spriteRenderer.flipX = m_currentDirection == Direction.RIGHT;
-        m_lineRenderer = m_bar.GetComponent<LineRenderer>();
         m_move = new Vector3(m_runSpeed, 0, 0);
         m_jump = new Vector3(0, m_jumpPower, 0);
+        m_rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     /// <summary>
@@ -85,30 +73,20 @@ public class Player : MonoBehaviour {
     public void Jump() { transform.position += m_jump; }
 
     /// <summary>
-    /// キー処理によるプレイヤーの各行動
+    /// プレイヤーの各行動
     /// </summary>
     public void PlayerAction() {
         if (Input.GetKey(KeyCode.RightArrow)) { RunRight(); }
         if (Input.GetKey(KeyCode.LeftArrow)) { RunLeft(); }
         if (Input.GetKey(KeyCode.UpArrow)){ Jump(); }
+        if (m_tip.moving) { Access(); }
     }
 
-    /*
-    /// <summary>
-    ///　オブジェクトクリックで生成
-    /// </summary>
-    public void Birth() {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-        
-            if (hit.collider){
-                bar = Instantiate(bar, transform.position, Quaternion.identity);
-                m_hitPos = ray.origin;
-                m_barflg = true;
-            }
-    }
-    */
+    public void Access() {
+        transform.position = Vector3.Lerp(transform.position, m_tip.transform.position,m_slowSpeeds);
 
+    }
+/*
     public　void Birth()
     {
         if (Input.GetMouseButtonDown(0)){
@@ -125,30 +103,10 @@ public class Player : MonoBehaviour {
         }
         m_bar.transform.Translate(Vector2.right * m_slowSpeeds);
     }
-
-    /// <summary>
-    /// 何かを伸ばす
-    /// </summary>
-    public void Extend(){
-        m_lineRenderer.useWorldSpace = true;
-        if (Input.GetMouseButtonDown(0))
-        {        
-            m_bar = Instantiate(m_bar, transform.position, Quaternion.identity);
-
-            
-            m_lineRenderer.SetPosition(0, new Vector3(0, 0, 0));         
-        }
-        //hoge = Vector3.Lerp(transform.position, mouseVector, Time.deltaTime * 2);
-        m_lineRenderer.SetPosition(1, new Vector3(0, hogey,0));
-        hogey += 0.01f;
-    }
-
+ */
     void Update() {
-        PlayerAction();
 
-        m_mousePosition = Input.mousePosition;
-        m_mousePosition.z = -Camera.main.transform.position.z;
-        mouseVector = Camera.main.ScreenToWorldPoint(m_mousePosition);
-   
+        PlayerAction();
+        
     }
 }
