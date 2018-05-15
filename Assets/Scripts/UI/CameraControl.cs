@@ -12,7 +12,7 @@ public class CameraControl : MonoBehaviour {
         player = GameObject.FindGameObjectWithTag("Player");
         offset = transform.position - player.transform.position;
     }
-
+    /*
     void LateUpdate()
     {
         Vector3 newPosition = transform.position;
@@ -20,5 +20,22 @@ public class CameraControl : MonoBehaviour {
         newPosition.y = player.transform.position.y + offset.y;
         newPosition.z = player.transform.position.z + offset.z;
         transform.position = newPosition;
+    }*/
+
+    private void Update()
+    {
+        if (player.transform.position.x >= transform.position.x + 9f){
+            transform.position += new Vector3(18f, 0, 0);
+        }
+        if (player.transform.position.x <= transform.position.x - 9f)
+            transform.position -= new Vector3(18f, 0, 0);
+
+        if (player.transform.position.y >= transform.position.y + 5f)
+            transform.position += new Vector3(0, 10f, 0);
+
+        if (player.transform.position.y <= transform.position.y - 5f)
+            transform.position -= new Vector3(0, 10f, 0);
+
+            
     }
 }

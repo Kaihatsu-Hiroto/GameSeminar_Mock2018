@@ -9,12 +9,10 @@ public class BarExtend : MonoBehaviour {
 
     LineRenderer m_lineRenderer;
 
-    [SerializeField, Range(0.00f, 0.10f)]
+    [SerializeField, Range(0.1f, 1f)]
     private float m_extendSpeed;
 
-    private float m_linePosy = 0;
-
-    public Player pl;
+    public Player m_player;
 
     [HideInInspector]
     public Vector3 hoge;
@@ -25,10 +23,7 @@ public class BarExtend : MonoBehaviour {
 
     private void Start(){
         m_lineRenderer = GetComponent<LineRenderer>();
-        
         state = 0;
-
-       
     }
 
     public void Extend(){
@@ -39,7 +34,7 @@ public class BarExtend : MonoBehaviour {
 
         m_lineRenderer.useWorldSpace = true;
 
-        m_lineRenderer.SetPosition(0, pl.transform.position);
+        m_lineRenderer.SetPosition(0, m_player.transform.position);
         m_lineRenderer.SetPosition(1, hoge);
 
         if (Input.GetMouseButton(0)){
@@ -49,22 +44,21 @@ public class BarExtend : MonoBehaviour {
             state = BarState.Shrink;        
         }
 
-        switch (state){
+        switch (state) {
             case BarState.Default:
-                hoge = pl.transform.position;
+                hoge = m_player.transform.position;
                 break;
             case BarState.Extnd:
                 if (hoge.y < mouseVector.y)
-                    hoge = Vector3.Lerp(hoge, mouseVector, 0.3f);
+                    hoge = Vector3.Lerp(hoge, mouseVector, m_extendSpeed);
                 break;
             case BarState.Shrink:
-                //hoge -= Vector3.Lerp(hoge, mouseVector, 0.3f);
-                state = BarState.Default;
+                hoge = Vector3.Lerp(hoge, m_player.transform.position,m_extendSpeed);
+                if (hoge == m_player.transform.position) { state = BarState.Default; }
                 break;
             default:
                 break;
-        }
-        m_linePosy += m_extendSpeed;      
+        }  
     }
 
     void Update(){

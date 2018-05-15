@@ -13,10 +13,10 @@ public class Player : MonoBehaviour {
 
     /// <summary> 移動 </summary>
     private Vector3 m_jump;
-    
+
     /// <summary>伸ばす速さ </summary>
-    [SerializeField]
-    private float m_slowSpeeds;
+    [SerializeField, Range(0.1f, 1f)]
+    private float m_possessSpeeds;
 
     /// <summary> 生成するバー </summary>
     [SerializeField]
@@ -73,6 +73,13 @@ public class Player : MonoBehaviour {
     public void Jump() { transform.position += m_jump; }
 
     /// <summary>
+    /// 高くジャンプする
+    /// </summary>
+    public void HighJump() {
+        m_rigidbody2D.AddForce(new Vector2(0, 13f), ForceMode2D.Impulse);
+    }
+
+    /// <summary>
     /// プレイヤーの各行動
     /// </summary>
     public void PlayerAction() {
@@ -82,31 +89,23 @@ public class Player : MonoBehaviour {
         if (m_tip.moving) { Access(); }
     }
 
-    public void Access() {
-        transform.position = Vector3.Lerp(transform.position, m_tip.transform.position,m_slowSpeeds);
-
-    }
-/*
-    public　void Birth()
+    /// <summary>アームの当たった位置へ移動 </summary>
+    public void Access()
     {
-        if (Input.GetMouseButtonDown(0)){
-            m_bar = Instantiate(m_bar, transform.position, Quaternion.identity);
 
-            m_mousePosition = Input.mousePosition;
-            m_mousePosition.z = -Camera.main.transform.position.z;
-            mouseVector = Camera.main.ScreenToWorldPoint(m_mousePosition);
-
-            float zRotation = Mathf.Atan2(mouseVector.y - m_bar.transform.position.y, mouseVector.x - m_bar.transform.position.x) * Mathf.Rad2Deg;
-            m_bar.transform.rotation = Quaternion.Euler(0f, 0f, zRotation);
-
-            m_bar.transform.Translate(Vector2.right * m_slowSpeeds);
+        if (m_tip.tipState == Tip.TipState.Wall){
+            transform.position = Vector3.Lerp(transform.position, m_tip.transform.position, m_possessSpeeds);
+            m_rigidbody2D.velocity = new Vector3(0, -2f, 0);        //←後で直すとこ
         }
-        m_bar.transform.Translate(Vector2.right * m_slowSpeeds);
+
+        if(m_tip.tipState == Tip.TipState.Button){
+            m_rigidbody2D.velocity = new Vector3(0, -3f, 0);        //←後で直すとこ
+        }
     }
- */
+
+
     void Update() {
 
         PlayerAction();
-        
     }
 }

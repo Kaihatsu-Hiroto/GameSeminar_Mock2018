@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Wall
+  - Button
+  - Ground
+  - Item
   layers:
   - Default
   - TransparentFX
@@ -41,4 +44,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Bar
+    uniqueID: 2118612277
     locked: 0
