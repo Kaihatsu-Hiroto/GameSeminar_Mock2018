@@ -34,6 +34,10 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private float m_runSpeed;
 
+    /// <summary> 遅延速度 </summary>
+    [SerializeField]
+    private float m_delaySpeed;
+
     [SerializeField]
     private Rigidbody2D m_rigidbody2D;
 
@@ -80,6 +84,13 @@ public class Player : MonoBehaviour {
     public void HighJump() {
         m_rigidbody2D.AddForce(new Vector2(0, 13f), ForceMode2D.Impulse);
     }
+    /// <summary>
+    /// のけ反る
+    /// </summary>
+    public void Bound(){
+        //m_rigidbody2D.AddForce(new Vector2(-2f, 3f), ForceMode2D.Impulse);
+        transform.position += new Vector3(-0.5f, 0.5f, 0);
+    }
 
     /// <summary>
     /// プレイヤーの各行動
@@ -100,7 +111,7 @@ public class Player : MonoBehaviour {
 
         if (m_tip.tipState == Tip.TipState.Button)
         {
-            m_rigidbody2D.velocity = new Vector3(0, -3f, 0);        //←後で直すとこ
+            m_rigidbody2D.velocity = new Vector3(0, -m_delaySpeed, 0);        //←後で直すとこ
         }
         if (m_tip.tipState == Tip.TipState.Item){
             transform.position = Vector3.Lerp(transform.position, m_tip.transform.position, m_possessSpeeds);
@@ -112,6 +123,11 @@ public class Player : MonoBehaviour {
         if (collision.tag == "Item") {
             m_spriteRenderer.color = new Color(255, 0, 0);
             m_move.x = 0.1f;
+        }
+
+        if (collision.tag == "Death"){
+            Debug.Log("desu");
+            m_rigidbody2D.AddForce(new Vector2(0, 2f), ForceMode2D.Impulse);
         }
     }
 
