@@ -37,31 +37,28 @@ public class BarExtend : MonoBehaviour {
         m_lineRenderer.SetPosition(0, m_player.transform.position);
         m_lineRenderer.SetPosition(1, hoge);
 
-        if (Input.GetMouseButton(0))
-        {
+        if (Input.GetMouseButton(0)){
             state = BarState.Extnd;
         }
-        if (Input.GetMouseButtonUp(0))
-        {
-            state = BarState.Shrink;
+        if (Input.GetMouseButtonUp(0)){
+            state = BarState.Shrink;        
         }
 
-        switch (state)
-        {
+        switch (state) {
             case BarState.Default:
                 hoge = m_player.transform.position;
                 break;
             case BarState.Extnd:
-                // if (hoge.y < mouseVector.y)
-                hoge = Vector3.Lerp(hoge, mouseVector, 0.3f);
+                if (hoge.y < mouseVector.y)
+                    hoge = Vector3.Lerp(hoge, mouseVector, m_extendSpeed);
                 break;
             case BarState.Shrink:
-                hoge -= Vector3.Lerp(hoge, mouseVector, 0.3f);
-                state = BarState.Default;
+                hoge = Vector3.Lerp(hoge, m_player.transform.position,m_extendSpeed);
+                if (hoge == m_player.transform.position) { state = BarState.Default; }
                 break;
             default:
                 break;
-        }
+        }  
     }
 
     void Update(){
