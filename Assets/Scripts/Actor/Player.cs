@@ -38,18 +38,20 @@ public class Player : MonoBehaviour {
     private Rigidbody2D m_rigidbody2D;
 
     [SerializeField]
+    private BoxCollider2D m_boxCollider2D;
+
+    [SerializeField]
     private SpriteRenderer m_spriteRenderer;
 
     [SerializeField]
     private Tip m_tip;
-
-    float hogey = 0;
 
     private void Start() {
         m_spriteRenderer.flipX = m_currentDirection == Direction.RIGHT;
         m_move = new Vector3(m_runSpeed, 0, 0);
         m_jump = new Vector3(0, m_jumpPower, 0);
         m_rigidbody2D = GetComponent<Rigidbody2D>();
+        m_boxCollider2D = GetComponent<BoxCollider2D>();
     }
 
     /// <summary>
@@ -90,22 +92,30 @@ public class Player : MonoBehaviour {
     }
 
     /// <summary>アームの当たった位置へ移動 </summary>
-    public void Access()
-    {
-
+    public void Access(){
         if (m_tip.tipState == Tip.TipState.Wall){
             transform.position = Vector3.Lerp(transform.position, m_tip.transform.position, m_possessSpeeds);
             m_rigidbody2D.velocity = new Vector3(0, -2f, 0);        //←後で直すとこ
         }
 
-        if(m_tip.tipState == Tip.TipState.Button){
+        if (m_tip.tipState == Tip.TipState.Button)
+        {
             m_rigidbody2D.velocity = new Vector3(0, -3f, 0);        //←後で直すとこ
+        }
+        if (m_tip.tipState == Tip.TipState.Item){
+            transform.position = Vector3.Lerp(transform.position, m_tip.transform.position, m_possessSpeeds);
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision){
+        
+        if (collision.tag == "Item") {
+            m_spriteRenderer.color = new Color(255, 0, 0);
+            m_move.x = 0.1f;
+        }
+    }
 
     void Update() {
-
         PlayerAction();
     }
 }

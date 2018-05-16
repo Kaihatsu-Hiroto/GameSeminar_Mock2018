@@ -17,6 +17,7 @@ public class Tip : MonoBehaviour {
     /// <summary>プレイヤーコンポーネント</summary>
     public Player m_player;
 
+    /// <summary>Sprite</summary>
     SpriteRenderer m_spriteRenderer;
 
     [SerializeField]
@@ -30,23 +31,18 @@ public class Tip : MonoBehaviour {
         m_spriteRenderer = GetComponent<SpriteRenderer>();
     }
     /// <param name="collision"></param>
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.tag == "Wall")
-        {
+    private void OnTriggerEnter2D(Collider2D collision){
+        if (collision.tag == "Wall"){
             moving = true;
             tipState = TipState.Wall;
         }
-
-        if (collision.tag == "Button")
-        {
+        if (collision.tag == "Button"){
             moving = true;
             tipState = TipState.Button;
         }
-        if (collision.tag == "Item")
-        {
+        if (collision.tag == "Item"){
             tipState = TipState.Item;
-            //m_spriteRenderer.sprite = m_starSprite;
+            moving = true;
         }
     }
 
@@ -55,10 +51,8 @@ public class Tip : MonoBehaviour {
         transform.position = m_barExtend.hoge;
     }
 
-
     // Update is called once per frame
     void Update () {
-        transform.position = m_barExtend.hoge;
-       
+        transform.position = m_barExtend.hoge;     
     }
 }
