@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
 
@@ -49,6 +50,9 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     private Tip m_tip;
+
+    [HideInInspector]
+    public bool isGoal;
 
     private void Start() {
         m_spriteRenderer.flipX = m_currentDirection == Direction.RIGHT;
@@ -130,6 +134,18 @@ public class Player : MonoBehaviour {
 
         if (collision.tag == "Needle"){
             m_rigidbody2D.AddForce(new Vector2(0, -5f), ForceMode2D.Impulse);
+        }
+
+        if (collision.tag == "Accel"){
+            m_rigidbody2D.freezeRotation = false;
+            m_rigidbody2D.AddForce(new Vector3(10f,2f,1f), ForceMode2D.Impulse);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D other){
+        
+        if(other.gameObject.tag=="Goal"){
+            isGoal = true;
         }
     }
 

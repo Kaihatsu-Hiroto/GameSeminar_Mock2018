@@ -10,6 +10,8 @@ TagManager:
   - Item
   - Death
   - Needle
+  - Accel
+  - Goal
   layers:
   - Default
   - TransparentFX
