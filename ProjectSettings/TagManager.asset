@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - Item
   - Death
+  - Needle
   layers:
   - Default
   - TransparentFX

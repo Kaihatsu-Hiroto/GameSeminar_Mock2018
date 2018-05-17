@@ -12,15 +12,6 @@ public class CameraControl : MonoBehaviour {
         player = GameObject.FindGameObjectWithTag("Player");
         offset = transform.position - player.transform.position;
     }
-    /*
-    void LateUpdate()
-    {
-        Vector3 newPosition = transform.position;
-        newPosition.x = player.transform.position.x + offset.x;
-        newPosition.y = player.transform.position.y + offset.y;
-        newPosition.z = player.transform.position.z + offset.z;
-        transform.position = newPosition;
-    }*/
 
     private void Update()
     {

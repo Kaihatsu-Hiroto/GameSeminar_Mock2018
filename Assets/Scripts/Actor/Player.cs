@@ -88,7 +88,6 @@ public class Player : MonoBehaviour {
     /// のけ反る
     /// </summary>
     public void Bound(){
-        //m_rigidbody2D.AddForce(new Vector2(-2f, 3f), ForceMode2D.Impulse);
         transform.position += new Vector3(-0.5f, 0.5f, 0);
     }
 
@@ -126,8 +125,11 @@ public class Player : MonoBehaviour {
         }
 
         if (collision.tag == "Death"){
-            Debug.Log("desu");
             m_rigidbody2D.AddForce(new Vector2(0, 2f), ForceMode2D.Impulse);
+        }
+
+        if (collision.tag == "Needle"){
+            m_rigidbody2D.AddForce(new Vector2(0, -5f), ForceMode2D.Impulse);
         }
     }
 
