@@ -7,8 +7,12 @@ using TouchScript.Gestures;
 
 public class TouchTest : MonoBehaviour {
 
-    private Vector3 m_touchStartPositon;
-    private Vector3 m_touchEndPositon;
+    [HideInInspector]
+    public Vector3 m_touchStartPositon;
+    [HideInInspector]
+    public Vector3 m_touchEndPositon;
+
+    public bool extendFlg;
 
     public static Vector3 touchStartPosition;
 
@@ -18,6 +22,8 @@ public class TouchTest : MonoBehaviour {
 
         // FlickGestureのdelegateに登録
         GetComponent<TapGesture>().Tapped += tappedHandle;
+
+        GetComponent<LongPressGesture>().LongPressed += LongPressHandle;
     }
     
     void OnDisable()
@@ -35,13 +41,16 @@ public class TouchTest : MonoBehaviour {
         // 登録を解除
         //GetComponent<FlickGesture>().Flicked -= FlickedHandle;
         GetComponent<TapGesture>().Tapped += tappedHandle;
+
+        GetComponent<FlickGesture>().Flicked += FlickedHandle;
+
+        GetComponent<LongPressGesture>().LongPressed += LongPressHandle;
     }
 
     void tappedHandle(object sender, System.EventArgs e)
     {
         //処理したい内容
-        var send = sender as TapGesture;
-        m_touchStartPositon = send.ScreenPosition;
+        var send = sender as TapGesture;     
     }
 
     void FlickedHandle(object sender, System.EventArgs e)
@@ -55,14 +64,18 @@ public class TouchTest : MonoBehaviour {
         // if (gesture.ScreenFlickVector.y < 0)としたら下方向へのフリックを検知できる
 
         //タッチ終了座標
-        m_touchEndPositon = gesture.ScreenFlickVector;
+       // m_touchEndPositon = gesture.ScreenFlickVector;
+        m_touchEndPositon = gesture.ScreenPosition;
 
-        Debug.Log("タッチ終了"+m_touchEndPositon);
-
-        ///角度指定
-        float zRotation = Mathf.Atan2(m_touchEndPositon.y - m_touchStartPositon.y, m_touchEndPositon.x - m_touchStartPositon.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, zRotation);
-       // Debug.Log("角度"+zRotation);
+        extendFlg = true;
     }
-    
+
+    void LongPressHandle(object sender, System.EventArgs e){
+        //処理したい内容
+        var send = sender as LongPressGesture;
+        Debug.Log("押してる");
+
+        m_touchStartPositon = send.ScreenPosition;
+    }
+
 }

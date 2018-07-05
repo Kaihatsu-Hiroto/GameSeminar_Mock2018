@@ -35,9 +35,6 @@ public class Punicon : MonoBehaviour
     /// <summary>
     /// 仮想インプット領域
     /// </summary>
-    [SerializeField]
-    private GameObject m_exPrefab;
-    private GameObject m_ex;
 
 
     /// <summary>
@@ -224,7 +221,6 @@ public class Punicon : MonoBehaviour
             m_dragflg = false;
             Debug.Log("end");
             movestate = MoveState.Default;
-            //Destroy(m_ex);
         }
         else
         {
