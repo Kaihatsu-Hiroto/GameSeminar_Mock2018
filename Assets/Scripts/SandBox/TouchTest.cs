@@ -7,23 +7,26 @@ using TouchScript.Gestures;
 
 public class TouchTest : MonoBehaviour {
 
+    /// <summary>タッチ開始座標 </summary>
     [HideInInspector]
     public Vector3 m_touchStartPositon;
+
+    /// <summary>タッチ終了座標 </summary>
     [HideInInspector]
     public Vector3 m_touchEndPositon;
 
-    public bool extendFlg;
+    /// <summary>入力動作の各フラグ </summary>
+    [HideInInspector]
+    public bool flicking, longPressing,releasing;
 
-    public static Vector3 touchStartPosition;
-
+    //イベント登録
     void OnEnable()
-    {   
+    {
         GetComponent<FlickGesture>().Flicked += FlickedHandle;
-
         // FlickGestureのdelegateに登録
         GetComponent<TapGesture>().Tapped += tappedHandle;
-
         GetComponent<LongPressGesture>().LongPressed += LongPressHandle;
+        GetComponent<ReleaseGesture>().Released += ReleaseHandle;
     }
     
     void OnDisable()
@@ -39,22 +42,20 @@ public class TouchTest : MonoBehaviour {
     void UnsubscribeEvent()
     {
         // 登録を解除
-        //GetComponent<FlickGesture>().Flicked -= FlickedHandle;
+        GetComponent<FlickGesture>().Flicked -= FlickedHandle;
         GetComponent<TapGesture>().Tapped += tappedHandle;
-
         GetComponent<FlickGesture>().Flicked += FlickedHandle;
-
         GetComponent<LongPressGesture>().LongPressed += LongPressHandle;
     }
 
-    void tappedHandle(object sender, System.EventArgs e)
-    {
+    //タップ処理
+    void tappedHandle(object sender, System.EventArgs e){
         //処理したい内容
         var send = sender as TapGesture;     
     }
 
-    void FlickedHandle(object sender, System.EventArgs e)
-    {
+    //フリック処理
+    void FlickedHandle(object sender, System.EventArgs e){
         var gesture = sender as FlickGesture;
         // ジェスチャが適切かチェック
         if (gesture.State != FlickGesture.GestureState.Recognized)
@@ -63,19 +64,31 @@ public class TouchTest : MonoBehaviour {
         // gesture.ScreenFlickVectorにフリック方向が入るので
         // if (gesture.ScreenFlickVector.y < 0)としたら下方向へのフリックを検知できる
 
-        //タッチ終了座標
-       // m_touchEndPositon = gesture.ScreenFlickVector;
-        m_touchEndPositon = gesture.ScreenPosition;
+        //フリックの強さ
+        // m_touchEndPositon = gesture.ScreenFlickVector;
 
-        extendFlg = true;
+        //フリックした座標
+        m_touchEndPositon = gesture.ScreenPosition;
+        flicking = true;
+        Debug.Log("フリック");
     }
 
+    //長押し処理
     void LongPressHandle(object sender, System.EventArgs e){
         //処理したい内容
         var send = sender as LongPressGesture;
+
         Debug.Log("押してる");
 
         m_touchStartPositon = send.ScreenPosition;
+        longPressing = true;
+    }
+
+    //指を離した際の処理
+    void ReleaseHandle(object sender, System.EventArgs e){
+        var send = sender as ReleaseGesture;
+        releasing = true;
+        Debug.Log("離した");
     }
 
 }

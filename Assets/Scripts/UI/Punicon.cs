@@ -190,7 +190,7 @@ public class Punicon : MonoBehaviour
             }
             
             m_dragflg = true;
-            Debug.Log("Start");
+           // Debug.Log("Start");
             m_screenMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
         //移動処理
@@ -219,14 +219,14 @@ public class Punicon : MonoBehaviour
                 ended(m_info);
             }
             m_dragflg = false;
-            Debug.Log("end");
+            //Debug.Log("end");
             movestate = MoveState.Default;
         }
         else
         {
             m_info.deltaScreenPoint = Vector2.zero;
             m_info.screenPoint = Vector2.zero;
-            Debug.Log("another");
+           // Debug.Log("another");
         }
         if (movestate == MoveState.right) { transform.position += new Vector3(m_moveSpeed, 0, 0); }
         if (movestate == MoveState.left) { transform.position += new Vector3(-m_moveSpeed, 0, 0); }
