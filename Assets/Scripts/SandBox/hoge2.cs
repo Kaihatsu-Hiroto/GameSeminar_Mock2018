@@ -66,7 +66,6 @@ public class hoge2 : MonoBehaviour {
 
     void Def()
     {
-
         transform.position = target.transform.position;
 
         touchStartPos = Camera.main.ScreenToWorldPoint(m_touchTest.m_touchStartPositon);
@@ -90,6 +89,7 @@ public class hoge2 : MonoBehaviour {
 
         //値格納
         AngleRotation = zRotation;
+
         //取得した角度反映
         transform.rotation = Quaternion.Euler(0f, 0f, AngleRotation);
                 
@@ -114,23 +114,10 @@ public class hoge2 : MonoBehaviour {
             case "Ground":
                 transform.position = Vector3.MoveTowards(transform.position, target.transform.position, 0.5f);
                 break;
-
             default:
                 break;
         }
-/*
-        //壁にあたったらそのまま移動
-        if (colGameObject.tag == "Wall")
-        {
-            target.transform.position = Vector3.MoveTowards(target.transform.position, hitPosition, 0.5f);
-        }
 
-        //地形は移動しない
-        if (colGameObject.tag == "Ground")
-        {
-            transform.position = Vector3.MoveTowards(transform.position,target.transform.position,0.5f);
-        }
-    */
         //射出先に到達したら初期化
         if (transform.position == target.transform.position){
             Init();        

@@ -10,15 +10,8 @@ using UnityEngine;
 /// </summary>
 public class Punicon : MonoBehaviour
 {
-    /// <summary>
-    /// ぷにコンの状態
-    /// </summary>
-    public enum PuniconState { Deffault,Extend,Jump};
-
-    [SerializeField]
+    [SerializeField][Range(0.01f,0.05f)]
     private float m_moveSpeed;
-
-    private float m_touchTime;
 
     /// <summary>ドラッグ終了地点 </summary>
     private Vector3 m_dragEndPoint;
@@ -28,9 +21,9 @@ public class Punicon : MonoBehaviour
 
     private Vector3 m_screenMouse;
 
-    private Rigidbody2D m_rigidbody2D;
+    public TouchTest m_touchTest;
 
-    private Touch m_touch;
+    private Rigidbody2D m_rigidbody2D;
 
     /// <summary>
     /// 仮想インプット領域
@@ -40,7 +33,7 @@ public class Punicon : MonoBehaviour
     /// <summary>
     /// プレイヤーの移動状態
     /// </summary>
-    public enum MoveState { Default, right, left,shot }
+    public enum MoveState { Default, right, left }
 
     MoveState movestate = 0;
     /// <summary>
@@ -95,8 +88,8 @@ public class Punicon : MonoBehaviour
     /// </summary>
     public static event System.Action<TouchInfo> Ended
     {
-        add{ Instance.ended += value; }
-        remove{ Instance.ended -= value; }
+        add { Instance.ended += value; }
+        remove { Instance.ended -= value; }
     }
 
     private TouchInfo m_info = new TouchInfo();
@@ -162,139 +155,134 @@ public class Punicon : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 触れている時間計測用
-    /// </summary>
-    private void TouchAccel() {
-        if (m_dragflg){
-            m_touchTime++;
-           // Debug.Log(m_touchTime);
-        }
-        else { m_touchTime = 0; }
-    }
-
-    private void Start() {
+    private void Start()
+    {
         m_rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
     {
-
-        TouchAccel();
-
-        if (State == TouchState.Started){
+        if (State == TouchState.Started)
+        {
             m_info.screenPoint = Position;
             m_info.deltaScreenPoint = Vector2.zero;
-            if (started != null){
+            if (started != null)
+            {
                 started(m_info);
             }
-            
+
             m_dragflg = true;
-           // Debug.Log("Start");
+            // Debug.Log("Start");
             m_screenMouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
         //移動処理
-        else if (State == TouchState.Moved)
-        {
+        else if (State == TouchState.Moved){
             m_info.deltaScreenPoint = Position - m_info.screenPoint;
             m_info.screenPoint = Position;
 
-            if (moved != null)
-            {
-                moved(m_info);
-            }
-                
-            if (m_info.deltaScreenPoint.x > 0){ movestate = MoveState.right; }
+            if (moved != null){ moved(m_info); }
+
+            //タッチ方向で移動向き変更
+            if (m_info.deltaScreenPoint.x > 0) { movestate = MoveState.right; }
             if (m_info.deltaScreenPoint.x < 0) { movestate = MoveState.left; }
         }
-        else if (State == TouchState.Ended)
-        {
+        else if (State == TouchState.Ended){
+
             //終了地点を渡す
             m_dragEndPoint = m_info.deltaScreenPoint;
 
             m_info.deltaScreenPoint = Position - m_info.screenPoint;
             m_info.screenPoint = Position;
-            if (ended != null)
-            {
-                ended(m_info);
-            }
+            if (ended != null){ended(m_info);}
             m_dragflg = false;
             //Debug.Log("end");
             movestate = MoveState.Default;
         }
-        else
-        {
+        else  {
             m_info.deltaScreenPoint = Vector2.zero;
             m_info.screenPoint = Vector2.zero;
-           // Debug.Log("another");
+            // Debug.Log("another");
         }
-        if (movestate == MoveState.right) { transform.position += new Vector3(m_moveSpeed, 0, 0); }
-        if (movestate == MoveState.left) { transform.position += new Vector3(-m_moveSpeed, 0, 0); }
+
+        //プレイヤー移動処理
+        PlayerMove();
+    }
+
+    void PlayerMove()
+    {      
+        if (movestate == MoveState.right){ transform.position += new Vector3(m_moveSpeed, 0,0);}
+        if (movestate == MoveState.left) {transform.position += new Vector3(-m_moveSpeed, 0, 0);}
+    }
+
+    void OnTriggerEnter2D(Collider2D col){
+            Debug.Log(col.gameObject.tag);
     }
 }
+    
 
 
-/// <summary>
-/// タッチ情報
-/// </summary>
-public class TouchInfo
-{
     /// <summary>
-    /// タッチされたスクリーン座標
+    /// タッチ情報
     /// </summary>
-    public Vector2 screenPoint;
-    /// <summary>
-    /// 1フレーム前にタッチされたスクリーン座標との差分
-    /// </summary>
-    public  Vector2 deltaScreenPoint;
-    /// <summary>
-    /// タッチされたビューポート座標
-    /// </summary>
-    public Vector2 ViewportPoint
+    public class TouchInfo
     {
-        get
+        /// <summary>
+        /// タッチされたスクリーン座標
+        /// </summary>
+        public Vector2 screenPoint;
+        /// <summary>
+        /// 1フレーム前にタッチされたスクリーン座標との差分
+        /// </summary>
+        public Vector2 deltaScreenPoint;
+        /// <summary>
+        /// タッチされたビューポート座標
+        /// </summary>
+        public Vector2 ViewportPoint
         {
-            viewportPoint.x = screenPoint.x / Screen.width;
-            viewportPoint.y = screenPoint.y / Screen.height;
-            return viewportPoint;
+            get
+            {
+                viewportPoint.x = screenPoint.x / Screen.width;
+                viewportPoint.y = screenPoint.y / Screen.height;
+                return viewportPoint;
+            }
         }
+        /// <summary>
+        /// 1フレーム前にタッチされたビューポート座標との差分
+        /// </summary>
+        public Vector2 DeltaViewportPoint
+        {
+            get
+            {
+                deltaViewportPoint.x = deltaScreenPoint.x / Screen.width;
+                deltaViewportPoint.y = deltaScreenPoint.y / Screen.height;
+                return deltaViewportPoint;
+            }
+        }
+
+        private Vector2 viewportPoint = Vector2.zero;
+        private Vector2 deltaViewportPoint = Vector2.zero;
     }
+
     /// <summary>
-    /// 1フレーム前にタッチされたビューポート座標との差分
+    /// タッチ状態
     /// </summary>
-    public Vector2 DeltaViewportPoint
+    public enum TouchState
     {
-        get
-        {
-            deltaViewportPoint.x = deltaScreenPoint.x / Screen.width;
-            deltaViewportPoint.y = deltaScreenPoint.y / Screen.height;
-            return deltaViewportPoint;
-        }
+        /// <summary>
+        /// タッチなし
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// タッチ開始
+        /// </summary>
+        Started = 1,
+        /// <summary>
+        /// タッチ中
+        /// </summary>
+        Moved = 2,
+        /// <summary>
+        /// タッチ終了
+        /// </summary>
+        Ended = 3,
     }
 
-    private Vector2 viewportPoint = Vector2.zero;
-    private Vector2 deltaViewportPoint = Vector2.zero;
-}
-
-/// <summary>
-/// タッチ状態
-/// </summary>
-public enum TouchState
-{
-    /// <summary>
-    /// タッチなし
-    /// </summary>
-    None = 0,
-    /// <summary>
-    /// タッチ開始
-    /// </summary>
-    Started = 1,
-    /// <summary>
-    /// タッチ中
-    /// </summary>
-    Moved = 2,
-    /// <summary>
-    /// タッチ終了
-    /// </summary>
-    Ended = 3,
-}

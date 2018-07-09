@@ -7,6 +7,10 @@ using TouchScript.Gestures;
 
 public class TouchTest : MonoBehaviour {
 
+
+    /// <summary>タッチ開始座標 </summary>
+    [HideInInspector]
+    public Vector3 m_pressStartPosition;
     /// <summary>タッチ開始座標 </summary>
     [HideInInspector]
     public Vector3 m_touchStartPositon;
@@ -17,35 +21,42 @@ public class TouchTest : MonoBehaviour {
 
     /// <summary>入力動作の各フラグ </summary>
     [HideInInspector]
-    public bool flicking, longPressing,releasing;
+    public bool pressing,flicking, longPressing,releasing;
 
     //イベント登録
     void OnEnable()
     {
+        // 各delegateに登録
         GetComponent<FlickGesture>().Flicked += FlickedHandle;
-        // FlickGestureのdelegateに登録
         GetComponent<TapGesture>().Tapped += tappedHandle;
         GetComponent<LongPressGesture>().LongPressed += LongPressHandle;
         GetComponent<ReleaseGesture>().Released += ReleaseHandle;
+        GetComponent<PressGesture>().Pressed += PressedHandle;
     }
     
-    void OnDisable()
-    {
+    void OnDisable(){
         UnsubscribeEvent();
     }
     
-    void OnDestroy()
-    {
+    void OnDestroy(){
         UnsubscribeEvent();
     }
 
-    void UnsubscribeEvent()
-    {
+    void UnsubscribeEvent(){
         // 登録を解除
-        GetComponent<FlickGesture>().Flicked -= FlickedHandle;
-        GetComponent<TapGesture>().Tapped += tappedHandle;
+        GetComponent<PressGesture>().Pressed += PressedHandle;
         GetComponent<FlickGesture>().Flicked += FlickedHandle;
+        GetComponent<TapGesture>().Tapped += tappedHandle;
+        GetComponent<ReleaseGesture>().Released += ReleaseHandle;
         GetComponent<LongPressGesture>().LongPressed += LongPressHandle;
+    }
+
+    //タップ処理
+    void PressedHandle(object sender, System.EventArgs e){   
+        //処理したい内容
+        var send = sender as PressGesture;
+        m_pressStartPosition = send.ScreenPosition;
+        pressing = true;
     }
 
     //タップ処理
@@ -70,7 +81,7 @@ public class TouchTest : MonoBehaviour {
         //フリックした座標
         m_touchEndPositon = gesture.ScreenPosition;
         flicking = true;
-        Debug.Log("フリック");
+        Debug.Log("フリック"+gesture.ScreenFlickVector);
     }
 
     //長押し処理
